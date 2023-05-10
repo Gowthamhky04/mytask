@@ -1,6 +1,6 @@
 const pool = require('../../db');
 const queries = require("./queries");
-//new function
+//new function i have done
 const getData = async function(req,res){
     try{
         pool.query(queries.getData,(error,result)=>{

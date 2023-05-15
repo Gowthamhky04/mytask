@@ -4,12 +4,13 @@ const getById = "SELECT * FROM todolist WHERE id_no = $1";
 const removeById = "DELETE FROM todolist WHERE id_no = $1";
 const updateById = "UPDATE todolist SET todo_notes=$1,todo_date=$2 WHERE id_no=$3";
 const sortByDate = "SELECT * FROM todolist ORDER BY todo_date ";
-const sortByText = "SELECT * FROM todolist ORDER BY todo_notes ";
+const sortByText = "SELECT * FROM todolist ORDER BY todo_notes  ";
+const sortByTextDesc="SELECT * FROM todolist ORDER BY todo_notes desc"
 
 
 
 
 
 module.exports={
-    getData,addText,getById,removeById,updateById,sortByDate,sortByText
+    getData,addText,getById,removeById,updateById,sortByDate,sortByText,sortByTextDesc,
 }

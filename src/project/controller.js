@@ -4,10 +4,10 @@ const queries = require("./queries");
 
 const getData = async function(req,res){
     try{
-        pool.query(queries.getData,(error,result)=>{
+        let result= await pool.query(queries.getData)
             res.status(200).json(result.rows);
-        })
-    }
+        }
+    
     catch(err){
         console.log("err");
     }
@@ -16,10 +16,10 @@ const getData = async function(req,res){
 
 const sortByDate = async function(req,res){
     
-      try{ pool.query(queries.sortByDate,(error,result)=>{
-        if(error) throw error;
+      try{ 
+        let result = await pool.query(queries.sortByDate)
         res.status(200).json(result.rows);
-    })} 
+    }
     catch(err){
         console.log(err);
     }
@@ -29,14 +29,22 @@ const sortByDate = async function(req,res){
 const sortByText =async function(req,res){
     
        try{
-        pool.query(queries.sortByText,(error,result)=>{
-            if(error) throw error;
+       let result = await  pool.query(queries.sortByText)
             res.status(200).json(result.rows);
-        })
        } catch(err){
         console.log(err);
        }
     };
+
+    const sortByTextDesc =async function(req,res){
+    
+        try{
+        let result = await  pool.query(queries.sortByTextDesc)
+             res.status(200).json(result.rows);
+        } catch(err){
+         console.log(err);
+        }
+     };
     
 
 
@@ -44,10 +52,9 @@ const addText = async function(req,res){
     try{
         const{id_no,todo_notes,todo_date} = req.body;
     
-        pool.query(queries.addText,[id_no,todo_notes,todo_date],(error,results)=>{
-            if(error) throw error;
+       let result = await  pool.query(queries.addText,[id_no,todo_notes,todo_date])
            res.status(201).send("student created successfully!");
-        }) 
+        
     }catch(err){
         console.log(err);
     }
@@ -58,17 +65,16 @@ const addText = async function(req,res){
 const  getById= async function(req,res){
     try{
         const id_no = parseInt(req.params.id_no);
-        pool.query(queries.getById,[id_no],(error,results)=>{
+        let result1 = await pool.query(queries.getById,[id_no])
             const noStudentFound = !results.rows.length;
             if(noStudentFound){
                 res.send("student does not exist in the table");
             }
-            pool.query(queries.getById,[id_no],(error,results)=>{
-                if(error) throw error;
+           let result2 = await pool.query(queries.getById,[id_no])
                 res.status(200).json(results.rows);
-            })
-        });
-    }catch(err){
+            }
+        
+    catch(err){
         console.log(err);
     }
     
@@ -78,17 +84,16 @@ const  getById= async function(req,res){
   const removeById = async function(req,res){
     try{
         const id_no = parseInt(req.params.id_no);
-        pool.query(queries.getById,[id_no],(error,results)=>{
+       let result1 = await  pool.query(queries.getById,[id_no])
             const noStudentFound = !results.rows.length;
             if(noStudentFound){
                 res.send("student does not exist in the table");
             }
-            pool.query(queries.removeById,[id_no],(error,results)=>{
+           let result2 = await pool.query(queries.removeById,[id_no])
                 if(error) throw error;
                 res.status(200).send("student table deleted successfully");
-            })
-        });
-    }catch(err){
+            }
+    catch(err){
         console.log(err);
     }
     
@@ -99,34 +104,21 @@ const updateById = async function(req,res){
         const id_no = parseInt(req.params.id_no);
         const{todo_notes,todo_date}=req.body;
     
-        pool.query(queries.getById,[id_no],(error,results)=>{
+       let result1 = await pool.query(queries.getById,[id_no])
             const noDataFound = !results.rows.length;
             if(noDataFound){
                 res.send("data is not found");
             }
-            pool.query(queries.updateById,[todo_notes,todo_date,id_no],(error,results)=>{
-                if(error) throw error;
+           let result2 = await pool.query(queries.updateById,[todo_notes,todo_date,id_no])
                 res.status(200).send("updated sucessfully!");
-            })
-        })
-    }catch(err){
+            }
+        
+    catch(err){
         console.log(err);
     }
     
 }
 
-// async function todolist(){
-//     try{
-//         console.log("async learning");
-//         let a=await removeById;
-//         return a;
-//     }
-//     catch(err){
-//          console.log(err);
-//     }
-// }
-// todolist();
-
 module.exports={
-    getData,addText,getById,removeById,updateById,sortByDate,sortByText
+    getData,addText,getById,removeById,updateById,sortByDate,sortByText,sortByTextDesc,
 }
